@@ -143,7 +143,7 @@ class Pidroid(commands.Bot):
     async def setup_hook(self):
         await self.api.test_connection()
         await self.load_cogs()
-        await self.__faststream_service.start()
+        #await self.__faststream_service.start()
         self.add_persistent_views()
 
     @override
@@ -152,7 +152,7 @@ class Pidroid(commands.Bot):
         await super().close()
         for task in self.__tasks:
             task.stop()
-        await self.__faststream_service.stop()
+        #await self.__faststream_service.stop()
 
     def add_persistent_views(self):
         """Adds persistent views that do not timeout."""
