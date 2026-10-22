@@ -79,10 +79,6 @@ def config_from_env() -> ConfigDict:
         "deepl_api_key": os.environ.get("DEEPL_API_KEY"),
         "tenor_api_key": os.environ.get("TENOR_API_KEY"),
         "unbelievaboat_api_key": os.environ.get("UNBELIEVABOAT_API_KEY"),
-        "github_app_id": os.environ.get("GITHUB_APP_ID"),
-        "github_app_pem": os.environ.get("GITHUB_APP_PEM"),
-        "github_owner": os.environ.get("GITHUB_OWNER"),
-        "github_repo": os.environ.get("GITHUB_REPO"),
         "rabbitmq_url": os.environ.get("RABBITMQ_URL"),
     }
 

@@ -21,7 +21,6 @@ from pidroid.models.event_types import EventName, EventType
 from pidroid.models.guild_configuration import GuildConfiguration
 from pidroid.models.persistent_views import PersistentSuggestionManagementView
 from pidroid.models.queue import AbstractMessageQueue, EmbedMessageQueue, MessageQueue
-from pidroid.modules.github.api import GithubAPI
 from pidroid.modules.moderation.models.case import Case
 from pidroid.modules.moderation.models.types import PunishmentType
 from pidroid.services.faststream_service import FastStreamService
@@ -129,11 +128,6 @@ class Pidroid(commands.Bot):
         self.session = None
 
         self.api: API = API(self, self.config["postgres_dsn"], self.debugging)
-        try:
-            self.github_api: GithubAPI | None = GithubAPI(self)
-        except ValueError:
-            self.github_api = None
-            logger.warning("GitHub integration is not properly configured, GitHub features will be disabled.")
 
         self.__queues: dict[int, AbstractMessageQueue] = {}
         self.__tasks: list[tasks.Loop] = []

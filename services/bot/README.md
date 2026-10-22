@@ -106,13 +106,6 @@ TT_API_KEY=
 DEEPL_API_KEY=
 # Optional: Unbelievaboat API key for economy integration in TheoTown guild
 UNBELIEVABOAT_API_KEY=
-
-# Optional: Used to create issues on TheoTown GitHub
-GITHUB_APP_ID=
-# Base64 encoded PEM string, can be obtained via `cat private-key.pem | base64 -w 0`
-GITHUB_APP_PEM=
-GITHUB_OWNER=
-GITHUB_REPO=
 ```
 
 Please note that if your credentials contain a dollar sign, you need to add another dollar sign to make it a literal.

@@ -154,25 +154,6 @@ class SuggestionCommandCog(commands.Cog):
             for key in reactions:
                 await message.add_reaction(key)
 
-            # If this is TheoTown guild, also create a GitHub issue for the suggestion
-            if is_theotown_guild and self.client.github_api:
-                try:
-                    data = await self.client.github_api.create_suggestion(
-                        title=truncate_string(suggestion, 100),
-                        text=suggestion,
-                        author=ctx.author,
-                        attachments=message.attachments,
-                        message_url=message.jump_url,
-                    )
-                    embed.set_author(
-                        name=ctx.author,
-                        url=data["html_url"],
-                        icon_url=ctx.author.display_avatar.url
-                    )
-                    await message.edit(embed=embed)
-                except Exception:
-                    logger.exception("Failed to create suggestion issue on GitHub")
-
             if config.suggestion_threads_enabled:
                 _ = await self.client.create_expiring_thread(
                     message, f"{truncate_string(str(ctx.author), 40)}'s suggestion discussion",
