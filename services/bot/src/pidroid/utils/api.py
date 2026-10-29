@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 
 from pidroid.models.tags import Tag
 from pidroid.models.guild_configuration import GuildConfiguration
-from pidroid.models.plugins import NewPlugin
 from pidroid.models.accounts import TheoTownAccount
 from pidroid.models.translation import TranslationEntryDict
 from pidroid.modules.moderation.models.case import Case
@@ -60,10 +59,6 @@ class API:
     async def legacy_get(self, route: Route) -> dict[Any, Any]:
         """Deprecated. Sends a GET request to the TheoTown API."""
         return await self.__http.legacy_request("GET", route)
-
-    async def legacy_post(self, route: Route, data: dict[Any, Any]) -> dict[Any, Any]:
-        """Deprecated. Sends a POST request to the TheoTown API."""
-        return await self.__http.legacy_request("POST", route, None, data)
 
     """Tag related"""
 
@@ -985,12 +980,3 @@ class API:
         if res.code == 200:
             return TheoTownAccount(res.data)
         return None
-
-    async def fetch_new_plugins(self, last_approval_time: int) -> list[NewPlugin]:
-        """Queries the TheoTown API for new plugins after the specified approval time."""
-        res = await self.get(Route(
-            "/game/plugin/new",
-            {"last_approval_time": last_approval_time},
-        ))
-        res.raise_on_error()
-        return [NewPlugin(np) for np in res.data]

@@ -10,7 +10,6 @@ from discord.ext.commands import BadArgument
 from discord.ext.commands.context import Context
 
 from pidroid.client import Pidroid
-from pidroid.constants import THEOTOWN_GUILD
 from pidroid.models.categories import TheoTownCategory
 from pidroid.models.exceptions import APIException
 from pidroid.utils import format_version_code, http
@@ -174,45 +173,6 @@ class TheoTownCommandCog(commands.Cog):
             "You can link your Discord account to TheoTown account "
             "[here](https://forum.theotown.com/account_link/discord)."
         ))
-
-    @commands.command(
-        name="redeem-wage",
-        brief="Redeems moderation wage for the linked TheoTown account.",
-        extras={
-            "category": TheoTownCategory,
-        },
-    )
-    @commands.max_concurrency(number=1, per=commands.BucketType.user)
-    @commands.bot_has_permissions(send_messages=True)
-    async def redeem_wage(self, ctx: Context[Pidroid]):        
-        # Obtain TT guild
-        guild = self.client.get_guild(THEOTOWN_GUILD)
-        if guild is None:
-            raise BadArgument("Pidroid cannot find the TheoTown server, I cannot determine your wage!")
-
-        # Obtain the member
-        member = await self.client.get_or_fetch_member(guild, ctx.author.id)
-        if member is None:
-            raise BadArgument("You are not a member of the TheoTown server, I cannot determine your wage!")
-
-        # Determine reward by role ID
-        roles = [r.id for r in member.roles if r.id in [
-            410512375083565066, 368799288127520769, 381899421992091669,
-            710914534394560544, 365482773206532096
-        ]]
-
-        if len(roles) == 0:
-            raise BadArgument("You are not eligible for a wage!")
-
-        # Actual transaction
-        res = await self.client.api.post(
-            Route("/game/account/redeem_wage"),
-            {"discord_id": ctx.author.id, "role_id": roles[-1]}
-        )
-        if res.code == 200:
-            data = res.data
-            return await ctx.reply(f'{data["diamonds_paid"]:,} diamonds have been redeemed to the {data["user"]["name"]} account!')
-        res.raise_on_error()
 
     @commands.command(
         name="encrypt-plugin",

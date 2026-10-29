@@ -8,7 +8,6 @@ from pidroid.client import Pidroid
 from pidroid.models.accounts import ForumAccount
 from pidroid.models.categories import TheoTownCategory
 from pidroid.services.error_handler import notify
-from pidroid.utils.decorators import command_checks
 from pidroid.utils.embeds import PidroidEmbed
 from pidroid.utils.http import Route
 
@@ -56,48 +55,6 @@ class ForumCommandCog(commands.Cog):
             if error.param.name == "username":
                 return await notify(ctx, "Please specify the username to view the information for.")
         setattr(error, 'unhandled', True)
-
-    @commands.group(
-        name="forum-gift",
-        invoke_without_command=True,
-        hidden=True,
-    )
-    async def forum_gift_command(self, ctx: Context[Pidroid]):
-        pass
-
-    @forum_gift_command.command(
-        name="diamonds",
-        brief="Gifts specified amount of diamonds to the user.",
-        usage="<forum username/ID> <amount>",
-        extras={
-            "category": TheoTownCategory,
-        },
-    )
-    @commands.bot_has_guild_permissions(send_messages=True)
-    @command_checks.is_theotown_developer()
-    async def diamonds_subcommand(self, ctx: Context[Pidroid], user: str, amount: int):
-        data = await self.client.api.legacy_post(
-            Route("/game/account/gift"),
-            {"username": user, "diamonds": amount},
-        )
-        return await ctx.reply(f'{amount:,} diamonds have been gifted to {data["name"]}!')
-
-    @forum_gift_command.command(
-        name="coins",
-        brief="Gifts specified amount of region coins to the user.",
-        usage="<forum username/ID> <amount>",
-        extras={
-            "category": TheoTownCategory,
-        },
-    )
-    @commands.bot_has_guild_permissions(send_messages=True)
-    @command_checks.is_theotown_developer()
-    async def region_coins_subcommand(self, ctx: Context[Pidroid], user: str, amount: int):
-        data = await self.client.api.legacy_post(
-            Route("/game/account/gift"),
-            {"username": user, "regioncoins": amount},
-        )
-        return await ctx.reply(f'{amount:,} region coins have been gifted to {data["name"]}!')
 
 
 async def setup(client: Pidroid) -> None:
